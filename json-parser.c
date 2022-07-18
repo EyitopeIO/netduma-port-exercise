@@ -8,7 +8,8 @@
 #include <unistd.h>
 #include <json-c/json.h>
 
-void iterate_deeper_into_jsontree(json_object *arraytree, char * key_elem);
+void iterate_deeper_into_jsontree(json_object *jsontree, char * key_elem);
+void iterate_deeper_into_jsonarray(json_object *arraytree, char * key_elem);
 
 
 int main (int argc, char *argv[]) 
@@ -64,13 +65,30 @@ void iterate_deeper_into_jsontree(json_object *treetop, char *key_elem)
                 break;
             
             case json_type_array:
+                iterate_deeper_into_jsonarray(tmp, key_elem);
                 break;
             
             default:
                 if (json_object_object_get_ex(treetop, key_elem, &needle)) {
                     printf("%s\n", json_object_get_string(needle));
-                    return;
+                    exit(EXIT_SUCCESS);
                 }
+        }
+    }
+}
+
+
+void iterate_deeper_into_jsonarray(json_object *arraytree, char *key_elem)
+{
+    int ln = json_object_array_length(arraytree);
+    json_object *tmp = NULL;
+    
+    for (int i = 0; i < ln; i++) {
+        if ((tmp = json_object_array_get_idx(arraytree, i)) != NULL) {
+            switch (json_object_get_type(tmp)) {
+                case json_type_object:
+                    iterate_deeper_into_jsontree(tmp, key_elem);
+            }
         }
     }
 }
