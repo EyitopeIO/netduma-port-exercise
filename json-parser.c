@@ -10,17 +10,21 @@
 
 void iterate_deeper_into_jsontree(json_object *jsontree, char * key_elem);
 void iterate_deeper_into_jsonarray(json_object *arraytree, char * key_elem);
+void show_help(void);
+
 
 
 int main (int argc, char *argv[]) 
 {
     if (argc != 3) {
+        show_help();
         printf("%s requires 2 arguments. You supplied %d\n", argv[0], argc-1);
         exit(EXIT_FAILURE);
     }
 
     // Check file exists and can be read
     if (access(argv[1], F_OK | R_OK) == -1) {
+        show_help();
         perror(NULL);
         exit(EXIT_FAILURE);
     }
@@ -91,4 +95,13 @@ void iterate_deeper_into_jsonarray(json_object *arraytree, char *key_elem)
             }
         }
     }
+}
+
+
+void show_help(void) {
+    printf (
+        "\n"
+        "*** JSON key search ***\n"
+        "Usage: json-parser <file> <key> \n"
+    );
 }
