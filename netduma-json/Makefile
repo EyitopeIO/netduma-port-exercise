@@ -2,34 +2,39 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=netduma-json
 PKG_RELEASE:=$(AUTORELEASE)
-PKG_SOURCE_DATE:=2022_07_18
-PKG_SOURCE_VERSION:=1.0.0
+PKG_VERSION:=1.0
+SOURCE_DIR:=/home/eyi/Netduma/netduma-port-exercise
+PKG_BUILD_DEPENDS:= +libjson-c
+PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
-PKG_BUILD_DIR:=$(PKG_BUILD_DIR)/netduma-json
-PKG_BUILD_DEPENDS:=+libjson-c
-
-CFLAGS += -ljson-s
+TARGET_CFLAGSm:=+ -ljson-c
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/netduma-json
+	SECTION:=practice-tests
 	CATEGORY:=Netduma
-	DEPENDS:+libjson-c
-	TITLE:=Netduma ecosystem
+	TITLE:=Netduma
 	MAINTAINER:=EyitopeIO <adeyitope.io@gmail.com>
 	MENU:=1
 endef
 
-define Package/netduma-json/config
-	source "$(SOURCE)/Config.in"
+define Package/description
+	Use the force to parse JSON.
 endef
 
-define Package/description
-	This packages makes eggs from ones and zeros. Studies show these eggs are more nutritious.
+define Build/Prepare
+	mkdir -p $(PKG_BUILD_DIR)
+	$(CP) -f $(SOURCE_DIR)/* $(PKG_BUILD_DIR)/
 endef
 
 define Build/Compile
-	$(MAKE) 
+	$(TARGET_CC) $(TARGET_CFLAGS) -o $(PKG_BUILD_DIR)/json-parser $(PKG_BUILD_DIR)/json-parser.c
 endef
 
-$(eval $(call BuildPackage,$(PKG_NAME)))
+define Build/Clean
+	rm -f $(PKG_BUILD_DIR)/o.*
+	rm -f $(PKG_BUILD_DIR)/json-parser
+endef
+
+$(eval $(call BuildPackage,netduma-json))
