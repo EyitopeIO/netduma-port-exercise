@@ -7,7 +7,7 @@ SOURCE_DIR:=/home/eyi/Netduma/netduma-port-exercise
 PKG_BUILD_DEPENDS:= +libjson-c
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
-TARGET_CFLAGSm:=+ -ljson-c
+TARGET_CFLAGS:=+ -ljson-c
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -33,7 +33,7 @@ define Build/Compile
 endef
 
 define Build/Clean
-	rm -f $(PKG_BUILD_DIR)/o.*
+	rm -f $(PKG_BUILD_DIR)/*.o
 	rm -f $(PKG_BUILD_DIR)/json-parser
 endef
 
